@@ -1,0 +1,123 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://demo.gd" id="1"]
+[ext_resource type="Script" path="res://music_state.gd" id="2"]
+[ext_resource type="Script" path="res://modal_instrument.gd" id="3"]
+
+[sub_resource type="BoxShape3D" id="key_shape"]
+size = Vector3(0.09, 0.03, 0.3)
+
+[sub_resource type="BoxMesh" id="key_mesh"]
+size = Vector3(0.09, 0.03, 0.3)
+
+[node name="Demo" type="Node3D"]
+script = ExtResource("1")
+
+[node name="MusicState" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="Instrument" type="Node3D" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("3")
+state = NodePath("../MusicState")
+
+[node name="Key0" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key0"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key0"]
+mesh = SubResource("key_mesh")
+
+[node name="Key1" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key1"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key1"]
+mesh = SubResource("key_mesh")
+
+[node name="Key2" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key2"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key2"]
+mesh = SubResource("key_mesh")
+
+[node name="Key3" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key3"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key3"]
+mesh = SubResource("key_mesh")
+
+[node name="Key4" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key4"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key4"]
+mesh = SubResource("key_mesh")
+
+[node name="Key5" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key5"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key5"]
+mesh = SubResource("key_mesh")
+
+[node name="Key6" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key6"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key6"]
+mesh = SubResource("key_mesh")
+
+[node name="Key7" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key7"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key7"]
+mesh = SubResource("key_mesh")
+
+[node name="Key8" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key8"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key8"]
+mesh = SubResource("key_mesh")
+
+[node name="Key9" type="Area3D" parent="Instrument"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Instrument/Key9"]
+shape = SubResource("key_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="Instrument/Key9"]
+mesh = SubResource("key_mesh")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.7526, 0.6585, 0, -0.6585, 0.7526, 0, 0.7, 0.8)
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866, 0, -0.866, 0.5, 0, 2, 0)
+
+[node name="Label" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 900.0
+offset_bottom = 140.0

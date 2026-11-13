@@ -1,0 +1,3 @@
+# Godot rebuilds this cache folder by itself
+.godot/
+.DS_Store
