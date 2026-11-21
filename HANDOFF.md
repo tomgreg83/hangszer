@@ -50,6 +50,14 @@ He also said: this is only the basics; he is not sure how the app will go. **Kee
 - `modal_instrument.gd` has an optional `state` export: if set, the keys follow it; if empty, nothing changes from before.
 - `test_music_state.gd`: headless, all passed (prints each mode's notes from C and checks them). Run it the same way as the other test.
 
+## Where this lives (2026-11-20)
+- The folder was renamed `Instrument` and sits inside `~/Desktop/dev/The Cosmic Key/`, but it is its **own git repo**: `git@github.com:tomgreg83/hangszer.git` (private; "hangszer" is Hungarian for instrument), branch `main`. The Cosmic Key game is a separate repo; do not mix them.
+- Tamas wants to continue on other computers and on his phone (a Claude cloud session on this repo). Commit and push before switching devices; pull on the other one.
+- The test commands in this file point at the Mac's Godot (`/Applications/Godot.app/...`). A cloud session may not have Godot; say so rather than working around it.
+
+## Idea Tamas asked about, not built (2026-11-20)
+The generated tone is additive synthesis: `make_tone()` sums 6 sine waves (harmonics 1-6, volume 1/h^2), so the "recipe" is a short list of numbers. Proposal: an instrument recipe (harmonic volumes, attack, release) saved as a file, plus a small UI panel in the demo with a slider per harmonic and presets, rebuilt live; headless test that the sliders change the sound. Wait for his go before building.
+
 ## Demo scene to hear it (2026-11-13)
 - `demo.tscn` (the project's main scene) + `demo.gd`: 10 box keys, a camera, a `MusicState` node the instrument is linked to, a label. Play with A S D F G H J K L ; and switch mode with number keys 1-7. Run: `/Applications/Godot.app/Contents/MacOS/Godot --path ~/Desktop/dev/GodotInstrument` or open the folder in Godot and press F5.
 - `test_demo.gd`: headless, 14 checks passing. It puts an `AudioEffectCapture` on the Master bus and measures the level and pitch of the real output (works with the headless Dummy audio driver): A = D3 146.83 Hz, lydian's 4th key = G#3 207.65 Hz, five notes together peak 0.62.
