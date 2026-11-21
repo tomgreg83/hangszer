@@ -52,6 +52,7 @@ const KEYBOARD_TEST_KEYS := [KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KE
 @export var keyboard_test: bool = true
 
 var _tone: AudioStreamWAV
+var _harmonics: Array = []          # overtone volumes from the last recipe; empty = the original tone
 var _players: Array[AudioStreamPlayer3D] = []
 var _touching: Array[int] = []      # fingers currently on each key
 var _down: Array[bool] = []
@@ -59,7 +60,7 @@ var _tweens: Array = []
 
 
 func _ready() -> void:
-	_tone = make_tone()
+	_tone = make_tone(_harmonics)
 	for child in (keys_parent if keys_parent else self).get_children():
 		if child is Area3D:
 			_add_key(child)
@@ -128,16 +129,35 @@ func _nearest_sample_note(note: int) -> int:
 	return best
 
 
-## One soft tone (a fundamental plus gentle overtones) as a looping sound.
-static func make_tone() -> AudioStreamWAV:
+## Uses a sound recipe (see instrument_recipe.gd): rebuilds the generated tone from its overtone volumes and
+## takes over its attack and release. Only affects the generated tone; recorded `samples` keep their own sound.
+func apply_recipe(recipe) -> void:
+	_harmonics = recipe.harmonics.duplicate()
+	attack_s = recipe.attack_s
+	release_s = recipe.release_s
+	_tone = make_tone(_harmonics)
+	retune()
+
+
+## One soft tone as a looping sound: the volumes of overtones 1, 2, 3, ... (up to 6). With none given, the
+## original tone, each overtone 1/h^2 as loud as the first. The total is kept so loud settings never clip.
+static func make_tone(harmonics: Array = []) -> AudioStreamWAV:
+	var weights: Array = harmonics.duplicate()
+	if weights.is_empty():
+		for h in range(1, 7):
+			weights.append(1.0 / (h * h))
+	var total := 0.0
+	for w in weights:
+		total += absf(w)
+	var gain := minf(0.55, 0.9 / maxf(total, 0.0001))
 	var data := PackedByteArray()
 	data.resize(SAMPLE_FRAMES * 2)
 	for i in SAMPLE_FRAMES:
 		var phase := TAU * SAMPLE_CYCLES * i / SAMPLE_FRAMES
 		var v := 0.0
-		for h in range(1, 7):
-			v += sin(phase * h) / (h * h)
-		data.encode_s16(i * 2, int(clampf(v * 0.55, -1.0, 1.0) * 32767.0))
+		for h in weights.size():
+			v += weights[h] * sin(phase * (h + 1))
+		data.encode_s16(i * 2, int(clampf(v * gain, -1.0, 1.0) * 32767.0))
 	var wav := AudioStreamWAV.new()
 	wav.format = AudioStreamWAV.FORMAT_16_BITS
 	wav.mix_rate = SAMPLE_RATE

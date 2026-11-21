@@ -16,6 +16,15 @@ func _ready() -> void:
 	state.changed.connect(_show_mode)
 	_show_mode()
 
+	label.offset_right = 600.0    # leave the right side free for the sound panel
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var layer := CanvasLayer.new()
+	add_child(layer)
+	var panel: PanelContainer = load("res://recipe_panel.gd").new()
+	panel.instrument = instrument
+	layer.add_child(panel)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE, 16)
+
 
 func _show_mode() -> void:
 	label.text = "%s %s\n\nPlay:  A S D F G H J K L ;\nMode:  1 ionian  2 dorian  3 phrygian  4 lydian  5 mixolydian  6 aeolian  7 locrian" % [

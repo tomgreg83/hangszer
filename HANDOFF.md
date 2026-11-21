@@ -55,8 +55,15 @@ He also said: this is only the basics; he is not sure how the app will go. **Kee
 - Tamas wants to continue on other computers and on his phone (a Claude cloud session on this repo). Commit and push before switching devices; pull on the other one.
 - The test commands in this file point at the Mac's Godot (`/Applications/Godot.app/...`). A cloud session may not have Godot; say so rather than working around it.
 
-## Idea Tamas asked about, not built (2026-11-20)
-The generated tone is additive synthesis: `make_tone()` sums 6 sine waves (harmonics 1-6, volume 1/h^2), so the "recipe" is a short list of numbers. Proposal: an instrument recipe (harmonic volumes, attack, release) saved as a file, plus a small UI panel in the demo with a slider per harmonic and presets, rebuilt live; headless test that the sliders change the sound. Wait for his go before building.
+## Sound recipe + sound panel (2026-11-21, built in a cloud session, NOT YET RUN)
+Tamas said go. Built without Godot (the cloud session has none), so **run the tests on the Mac first**:
+`perl -e 'alarm 60; exec @ARGV' /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script test_recipe.gd`
+and re-run the other three tests, since `modal_instrument.gd` and `demo.gd` changed.
+- `instrument_recipe.gd`: a recipe = 6 overtone volumes (0-1), `attack_s`, `release_s`. Five presets (warm = the original tone, soft, bright, hollow, pure). Saves/loads JSON.
+- `modal_instrument.gd`: new `apply_recipe(recipe)`; `make_tone(harmonics)` takes the volumes (no argument = the original tone, unchanged), with a gain limit so loud settings never clip. Affects only the generated tone, not recorded `samples`. A key already held keeps its old tone until pressed again (a player's stream is reset by `retune()`; not checked whether that cuts a held note).
+- `recipe_panel.gd`: panel with preset menu, 6 overtone sliders, attack, release, Save/Load (file `user://my_sound.json`). Controls do not take keyboard focus, so A S D F ... keep playing. Added to the top right in `demo.gd`.
+- `test_recipe.gd`: headless test of all of the above.
+- Not checked: how the panel looks (layout/overlap with the label), and how it sounds.
 
 ## Demo scene to hear it (2026-11-13)
 - `demo.tscn` (the project's main scene) + `demo.gd`: 10 box keys, a camera, a `MusicState` node the instrument is linked to, a label. Play with A S D F G H J K L ; and switch mode with number keys 1-7. Run: `/Applications/Godot.app/Contents/MacOS/Godot --path ~/Desktop/dev/GodotInstrument` or open the folder in Godot and press F5.
